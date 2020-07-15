@@ -7,11 +7,7 @@ FROM mcr.microsoft.com/dotnet/core/sdk:3.0-buster AS build
 WORKDIR /src
 COPY ["AppMvcBasica/AppMvcBasica.csproj", "AppMvcBasica/"]
 RUN dotnet restore "AppMvcBasica/AppMvcBasica.csproj"
-
-COPY ["AppMvcBasica/entrypoint.sh", "entrypoint.sh"]
-RUN chmod +x ./entrypoint.sh
 COPY . .
-
 WORKDIR "/src/AppMvcBasica"
 RUN dotnet build "AppMvcBasica.csproj" -c Release -o /app/build
 
@@ -22,7 +18,3 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "AppMvcBasica.dll"]
-
-WORKDIR /src
-RUN chmod +x ./AppMvcBasica/entrypoint.sh
-CMD /bin/bash ./AppMvcBasica/entrypoint.sh
