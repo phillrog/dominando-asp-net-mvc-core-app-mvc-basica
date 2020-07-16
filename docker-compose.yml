@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  appmvcbasico:
+    image: ${DOCKER_REGISTRY-}appmvcbasico
+    build:
+      context: .
+      dockerfile: AppMvcBasico/Dockerfile
