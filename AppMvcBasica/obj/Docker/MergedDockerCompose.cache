@@ -1,0 +1,38 @@
+networks:
+  postgres-network:
+    driver: bridge
+services:
+  app-mvc-basico:
+    build:
+      context: C:\Users\psouza\source\repos\dominando-asp-net-mvc-core-app-mvc-basica\AppMvcBasica
+      dockerfile: Dockerfile
+    container_name: app-mvc-basico
+    depends_on:
+    - postgres
+    image: appmvcbasico
+    networks:
+      postgres-network: null
+    ports:
+    - 5001:5000/tcp
+  pgadmin:
+    container_name: app-mvc-basico-pgadmin
+    depends_on:
+    - postgres
+    environment:
+      PGADMIN_DEFAULT_EMAIL: phillrog@hotmail.com
+      PGADMIN_DEFAULT_PASSWORD: '1234'
+    image: dpage/pgadmin4
+    networks:
+      postgres-network: null
+    ports:
+    - 16543:80/tcp
+  postgres:
+    container_name: app-mvc-basico-postgres
+    environment:
+      POSTGRES_PASSWORD: '1234'
+    image: postgres
+    networks:
+      postgres-network: null
+    ports:
+    - 15432:5432/tcp
+version: '3.0'

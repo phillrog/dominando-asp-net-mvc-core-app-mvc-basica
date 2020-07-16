@@ -8,7 +8,7 @@ WORKDIR /src
 COPY ["AppMvcBasica/AppMvcBasica.csproj", "AppMvcBasica/"]
 RUN dotnet restore "AppMvcBasica/AppMvcBasica.csproj"
 
-COPY ["AppMvcBasica/entrypoint.sh", "entrypoint.sh"]
+COPY ["entrypoint.sh", "entrypoint.sh"]
 RUN chmod +x ./entrypoint.sh
 COPY . .
 
@@ -23,6 +23,4 @@ WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "AppMvcBasica.dll"]
 
-WORKDIR /src
-RUN chmod +x ./AppMvcBasica/entrypoint.sh
-CMD /bin/bash ./AppMvcBasica/entrypoint.sh
+CMD /bin/bash ./entrypoint.sh
