@@ -1,35 +1,23 @@
 version: '3.4'
 
 services:
-    postgres:
-        container_name: app-mvc-basico-postgres
-        image: postgres
+    sql.database:
+        container_name: app-mvc-basico-banco
+        image: microsoft/mssql-server-linux:2017-latest
         environment:
-            POSTGRES_PASSWORD: "1234"
+            - SA_PASSWORD=123Aa321
+            - ACCEPT_EULA=Y
         ports:
-            - "15432:5432"
+            - "1433:1433"
         networks:
-            - postgres-network
-      
-    pgadmin:
-        container_name: app-mvc-basico-pgadmin
-        image: dpage/pgadmin4    
-        environment:
-            PGADMIN_DEFAULT_EMAIL: "phillrog@hotmail.com"
-            PGADMIN_DEFAULT_PASSWORD: "1234"
-        ports:
-            - "16543:80"
-        depends_on:
-            - postgres
-        networks:
-            - postgres-network
+            - mssql-network
 
     appmvcbasico:
         container_name: app-mvc-basico-web
         environment:
             - ASPNETCORE_ENVIRONMENT=Development
             - ASPNETCORE_URLS=https://+:443;http://+:80
-            - ASPNETCORE_HTTPS_PORT=5004
+            - ASPNETCORE_HTTPS_PORT=4004
         ports:
             - "4001:80"
             - "4004:443"
@@ -37,10 +25,10 @@ services:
             - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
             - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
         depends_on:
-            - postgres
+            - sql.database
         networks:
-            - postgres-network
+            - mssql-network
 
 networks: 
-    postgres-network:
+    mssql-network:
         driver: bridge
